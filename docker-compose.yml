@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
+    environment:
+      discovery.type: single-node
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  fluentd:
+    build: ./fluentd
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+      - ./logs:/logs
+    links:
+      - "elasticsearch"
+    ports:
+      - 24224:24224
+      - "24224:24224/udp"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.7.0
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+    links:
+      - "elasticsearch"
+    ports:
+      - 5601:5601
