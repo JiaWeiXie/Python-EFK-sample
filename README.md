@@ -21,6 +21,45 @@ $ pipenv shell
 ```
 
 
+### Django logging
+
+```python
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            '()': 'fluent.handler.FluentRecordFormatter',
+            'format': {
+                'host': '%(hostname)s',
+                'where': '%(module)s.%(funcName)s',
+                'lineno': '%(lineno)d',
+                'type': '%(levelname)s',
+                'pathname': '%(pathname)s',
+            }
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+        'fluentd': {
+            'level': 'WARNING',
+            'class': 'myapp.logging.handler.MyFluentdHandler',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['fluentd', 'console'],
+            'level': 'WARNING',
+        },
+    },
+}
+```
+
+
 ## Reference
 
 - [EFK stack](https://github.com/giefferre/EFK-stack)

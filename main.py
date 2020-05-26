@@ -44,8 +44,8 @@ def base():
     logger.emit_with_time('AA', cur_time, {'from': 'AA', 'to':'BB'})
 
 def main():
-    # base()
-    # handle()
+    base()
+    handle()
     custom()
     
 
